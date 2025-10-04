@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router";
 import { Login, Signup } from "@/pages/auth";
+import { Route, Routes } from "react-router";
 
 function App() {
   return (

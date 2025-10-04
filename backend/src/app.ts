@@ -1,10 +1,14 @@
-import express from "express";
-import type { HealthCheckResponse } from "@shared/types";
 import { getPackageVersion } from "@/config/server.config";
+import type { HealthCheckResponse } from "@shared/types";
+import express from "express";
+import authRouter from "./routers/authRouter";
 
 const app = express();
 const PORT = Bun.env.PORT || 5000;
 const VERSION = getPackageVersion();
+
+app.use('/auth/', authRouter);
+app.use(express.json());
 
 // Required to make sure that the container is healthy
 app.get("/health", (_req, res) => {

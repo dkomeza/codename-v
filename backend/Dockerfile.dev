@@ -1,5 +1,7 @@
 FROM oven/bun:debian
 
+RUN apt-get update -y && apt-get install -y openssl
+
 WORKDIR /shared
 
 COPY --from=shared . .
