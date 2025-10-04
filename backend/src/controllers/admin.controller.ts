@@ -23,9 +23,6 @@ export async function getCoordinators(page: number, limit: number) {
 
 export async function getUsers(page: number, limit: number) {
   return await prisma.user.findMany({
-    where: {
-      type: "VOLUNTEER",
-    },
     skip: (page - 1) * limit,
     take: limit,
     select: {
