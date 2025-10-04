@@ -18,8 +18,23 @@ export const deleteOrganizationById = async (req: any, res: any) => {
   }
 };
 
-export const update = () => {
-  
+export const update = async (req: any, res: any) => {
+   try {
+    const { organizationId, newName } = req.body;
+
+    const organization = await prisma.organization.update({
+      where: {
+        id: organizationId
+      },
+      data: {
+        organizationName: newName
+      }
+    });
+
+    res.status(200).json(organization);
+  } catch (e: any) {
+    res.status(500).json({ message: 'Błąd serwera!' });
+  }
 };
 
 export const getOrganizationById = async (req: any, res: any) => {
@@ -36,7 +51,7 @@ export const getOrganizationById = async (req: any, res: any) => {
       res.status(404).json({message: `Nie ma organizacji o id: ${organizationId}!`});
     }
 
-    res.status(200).json();
+    res.status(200).json(organization);
   } catch (e: any) {
     res.status(500).json({ message: 'Błąd serwera!' });
   }
