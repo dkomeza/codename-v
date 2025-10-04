@@ -33,3 +33,30 @@ export async function createUser(data: AdminNewUser & { token: string }): Promis
 
   return await validateResponse<void>(response);
 }
+
+export async function modifyUser(
+  data: Partial<AdminNewUser> & { token: string; id: string }
+): Promise<void> {
+  const response = await fetch(`${url}/admin/users/${data.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${data.token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  return await validateResponse<void>(response);
+}
+
+export async function deleteUser(data: { token: string; id: string }): Promise<void> {
+  const response = await fetch(`${url}/admin/users/${data.id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${data.token}`,
+    },
+  });
+
+  return await validateResponse<void>(response);
+}

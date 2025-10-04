@@ -1,4 +1,5 @@
 import prisma from "@/config/postgres.config";
+import type { AdminNewUser } from "@shared/types/admin.types";
 
 export async function getOrgs(page: number, limit: number) {
   return await prisma.organization.findMany({
@@ -34,6 +35,39 @@ export async function getUsers(page: number, limit: number) {
       type: true,
     },
   });
+}
+
+export async function modifyUser(id: string, data: Partial<AdminNewUser>) {
+  await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: data,
+  });
+}
+
+export async function deleteUser(id: string) {
+  await prisma.$transaction([
+    prisma.message.deleteMany({
+      where: {
+        senderUserId: id,
+      },
+    }),
+    prisma.chat.deleteMany({
+      where: {
+        users: {
+          some: {
+            id: id,
+          },
+        },
+      },
+    }),
+    prisma.user.delete({
+      where: {
+        id: id,
+      },
+    }),
+  ]);
 }
 
 export async function getAdminDashboardData(limit: number) {

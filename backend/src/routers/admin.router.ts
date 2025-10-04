@@ -1,4 +1,9 @@
-import { getAdminDashboardData, getUsers } from "@/controllers/admin.controller";
+import {
+  deleteUser,
+  getAdminDashboardData,
+  getUsers,
+  modifyUser,
+} from "@/controllers/admin.controller";
 import { register } from "@/controllers/auth.controller";
 import { authenticate, authenticateAdmin } from "@/middleware/auth.middleware";
 import { NewUserSchema } from "@shared/schemas/admin.schema";
@@ -43,6 +48,37 @@ adminRouter.post("/users", async (req, res) => {
       ...newUserData,
       confirmPassword: newUserData.password,
     });
+  } catch (e: any) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+adminRouter.put("/users/:id", async (req, res) => {
+  const userId = req.params.id;
+  const result = NewUserSchema.partial().safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ message: "Invalid request data", errors: result.error.message });
+  }
+
+  const updateData = result.data;
+
+  try {
+    await modifyUser(userId, updateData);
+
+    return res.status(200).json({ message: "User updated successfully" });
+  } catch (e: any) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+adminRouter.delete("/users/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    await deleteUser(userId);
+
+    return res.status(200).json({ message: "User deleted successfully" });
   } catch (e: any) {
     return res.status(500).json({ message: e.message });
   }
