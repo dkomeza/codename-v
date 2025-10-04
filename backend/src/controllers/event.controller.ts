@@ -29,3 +29,12 @@ export async function saveEvent(eventData: Event) {
 
   return urls;
 }
+
+export async function getUploadByUrl(url: string, secret: string) {
+  return await prisma.secureUpload.findFirst({
+    where: {
+      url,
+      secret,
+    },
+  });
+}
