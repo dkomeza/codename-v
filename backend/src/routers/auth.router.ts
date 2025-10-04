@@ -21,7 +21,7 @@ authRouter.get("/", authenticate, (req, res) => {
     role: req.user.type as User["role"],
   };
 
-  res.status(200).json({ user });
+  res.status(200).json(user);
 });
 
 authRouter.post("/signin", async (req, res) => {
