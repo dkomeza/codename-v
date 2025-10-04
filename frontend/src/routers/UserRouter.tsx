@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
+import CalendarPage from "@/pages/calendar/CalendarPage";
 import MainLayout from "@/pages/main/MainLayout";
 import { Route, Routes } from "react-router";
 
@@ -13,6 +14,7 @@ export default function UserRouter() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<div>Dashboard</div>} />
+        <Route path="/calendar" element={<CalendarPage />} />
       </Route>
     </Routes>
   );
