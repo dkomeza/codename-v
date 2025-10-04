@@ -51,7 +51,7 @@ authRouter.post("/signup", checkDuplicateEmail, async (req, res) => {
   }
 
   try {
-    const token = await register(result.data);
+    const token = await register({ ...result.data, type: "VOLUNTEER" });
     const data: AuthToken = { token };
 
     return res.status(201).json(data);

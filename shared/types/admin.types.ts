@@ -1,3 +1,6 @@
+import type { NewUserSchema } from "@/schemas/admin.schema";
+import { z } from "zod";
+
 export type User = {
   id: string;
   name: string;
@@ -16,3 +19,5 @@ export type AdminUsersRequest = {
   limit: number;
   token: string;
 };
+
+export type AdminNewUser = z.infer<typeof NewUserSchema>;

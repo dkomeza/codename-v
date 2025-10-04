@@ -33,7 +33,7 @@ export const register = async (data: SignUpData) => {
       surname: data.surname,
       email: data.email,
       password: hashedPassword,
-      type: "VOLUNTEER",
+      type: data.type,
       birthDate: data.birthDate,
     },
   });

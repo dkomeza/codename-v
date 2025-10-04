@@ -9,11 +9,11 @@ export type User = {
   role: Role;
 };
 
-type Role = "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
+export type Role = "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 
 export type AuthToken = {
   token: string;
 };
 
 export type LoginData = z.infer<typeof LoginSchema>;
-export type SignUpData = z.infer<typeof SignUpSchema>;
+export type SignUpData = z.infer<typeof SignUpSchema> & { type: Role };
