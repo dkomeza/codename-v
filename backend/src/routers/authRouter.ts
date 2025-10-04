@@ -25,7 +25,7 @@ authRouter.post('/register', async (req, res) => {
        birthDate
      },
    });
-
+   
    res.status(201).json(user);
  } catch (error) {
    console.error('Error creating user:', error);

@@ -8,6 +8,7 @@ const PORT = Bun.env.PORT || 5000;
 const VERSION = getPackageVersion();
 
 app.use('/auth/', authRouter);
+app.use(express.json());
 
 // Required to make sure that the container is healthy
 app.get("/health", (_req, res) => {
