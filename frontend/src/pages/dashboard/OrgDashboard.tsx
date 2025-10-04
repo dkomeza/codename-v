@@ -12,7 +12,7 @@ import { NavLink, Routes } from "react-router";
 
 const OrgDashboard = () => {
   const tabs = [
-    { path: "/org/", label: "Główna", icon: <HomeRounded className="w-5 h-5" /> },
+    { path: "/org", label: "Główna", icon: <HomeRounded className="w-5 h-5" /> },
     {
       path: "/org/calendar",
       label: "Kalendarz",
@@ -24,7 +24,6 @@ const OrgDashboard = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Content */}
       <main className="flex-1 overflow-auto p-4 bg-gray-50">
         <Routes>
           {/* <Route path="" element={<Home />} />
