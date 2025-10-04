@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import Dashboard from "@/pages/main/Dashboard";
 import MainLayout from "@/pages/main/MainLayout";
+import CategoryPage from "@/pages/main/CategoryPage";
 import { Navigate, Route, Routes } from "react-router";
 
 export default function UserRouter() {
@@ -14,6 +15,7 @@ export default function UserRouter() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/:categoryName" element={<CategoryPage />} />
       </Route>
     </Routes>
   );

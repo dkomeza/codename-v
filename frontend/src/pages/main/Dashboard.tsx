@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { useNavigate } from "react-router";
 import NotificationMenu from '@/components/notifications/notificationMenu';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,9 +27,13 @@ const events: Event[] = [
   { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna" },
 ];
 
-const categories = ["Polecane", "Pomoc społeczna i humanitarna", "Ochrona Środowiska"];
-
 function Dashboard() {
+  const categories = useMemo(
+    () => Array.from(new Set(events.map(e => e.category))),
+    [events]
+  );
+
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const filteredEvents = events.filter(e => e.title.toLowerCase().includes(query.toLowerCase()));
 
@@ -85,7 +90,9 @@ function Dashboard() {
       {/* Eventy według kategorii */}
       {eventsByCategory.map(({ category, events }) => (
         <div key={category} className="space-y-2">
-          <div className="flex items-center cursor-pointer hover:text-red-500">
+          <div className="flex items-center cursor-pointer hover:text-red-500"
+            onClick={() => navigate(`/${encodeURIComponent(category)}`)}
+          >
             <h2 className="text-lg font-semibold">{category}</h2>
             <ChevronRight className="w-5 h-5 text-red-500 select-none" />
           </div>
