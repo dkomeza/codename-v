@@ -12,15 +12,15 @@ type Event = {
   location: string;
   image: string;
   category: string;
-  favourite: boolean
+  favorite: boolean
 };
 
 // konieczna zamiana statycznych danych na pobierane
 const events: Event[] = [
-  { id: 1, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favourite: true },
-  { id: 2, title: "Sprzątanie parku", date: "Null", location: "Null", image: "pigeon.png", category: "Ochrona Środowiska", favourite: false },
-  { id: 3, title: "Spotkanie organizacyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favourite: true },
-  { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna", favourite: false },
+  { id: 1, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favorite: true },
+  { id: 2, title: "Sprzątanie parku", date: "Null", location: "Null", image: "pigeon.png", category: "Ochrona Środowiska", favorite: false },
+  { id: 3, title: "Spotkanie organizacyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favorite: true },
+  { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna", favorite: false },
 ];
 
 function Dashboard() {
@@ -29,18 +29,18 @@ function Dashboard() {
     [events]
   );
 
-  const [favouriteEvents, setFavouriteEvents] = useState<Event[]>(events);
-  const toggleFavourite = (id: number) => {
-    setFavouriteEvents(prev =>
+  const [favoriteEvents, setFavoriteEvents] = useState<Event[]>(events);
+  const toggleFavorite = (id: number) => {
+    setFavoriteEvents(prev =>
       prev.map(ev =>
-        ev.id === id ? { ...ev, favourite: !ev.favourite } : ev
+        ev.id === id ? { ...ev, favorite: !ev.favorite } : ev
       )
     );
   };
 
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const filteredEvents = favouriteEvents.filter(e => e.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredEvents = favoriteEvents.filter(e => e.title.toLowerCase().includes(query.toLowerCase()));
 
   const [scrollIndices, setScrollIndices] = useState<{ [key: string]: number }>(
     categories.reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {})
@@ -125,12 +125,12 @@ function Dashboard() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleFavourite(event.id);
+                          toggleFavorite(event.id);
                         }}
                         className="absolute top-2 right-2 p-1 rounded-full bg-white/70 hover:bg-black/10 transition-colors"
                       >
                         <Heart
-                          className={`w-6 h-6 ${event.favourite ? "fill-red-500 text-red-500" : "text-red-500"
+                          className={`w-6 h-6 ${event.favorite ? "fill-red-500 text-red-500" : "text-red-500"
                             }`}
                         />
                       </button>
