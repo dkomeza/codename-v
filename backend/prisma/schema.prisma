@@ -48,7 +48,7 @@ model Event {
 model Organization {
   id String @id @default(cuid())
   organizationName String
-  
+
   User User[]
   Event Event[]
   Application Application[]
@@ -70,6 +70,7 @@ model Application {
 
 model Chat {
   id String @id @default(cuid())
+
   users User[]
 
   Message Message[]
@@ -85,7 +86,6 @@ model Message {
   chatId String
   message String
   messageTime DateTime
-  sentFromUser1 Boolean
   
   @@map("messages")
 }
