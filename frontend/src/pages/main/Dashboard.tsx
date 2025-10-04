@@ -1,10 +1,7 @@
-import React from 'react'
-import NotificationDropMenu from '@/components/notifications/notificationDropMenu'
+import NotificationDropMenu from "@/components/notifications/notificationDropMenu";
 
 function Dashboard() {
-  return (
-      <NotificationDropMenu></NotificationDropMenu>
-  )
+  return <NotificationDropMenu></NotificationDropMenu>;
 }
 
-export default Dashboard
+export default Dashboard;
