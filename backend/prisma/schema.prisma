@@ -24,6 +24,7 @@ model User {
   orgIdRel Organization @relation(fields: [organizationId], references: [id])
   organizationId String
   birthDate      DateTime
+  chats Chat[]
 
   Application Application[]
   Message Message[]
@@ -50,7 +51,6 @@ model Organization {
   User User[]
   Event Event[]
   Application Application[]
-  Message Message[]
 
   @@map("organizations")
 }
@@ -67,15 +67,23 @@ model Application {
   @@map("applications")
 }
 
+model Chat {
+  id String @id @default(cuid())
+  users User[]
+  Message Message[]
+
+  @@map("chats")
+}
+
 model Message {
   id String @id @default(cuid())
-  userIdRel User @relation(fields: [userId], references: [id])
-  userId String
-  orgIdRel Organization  @relation(fields: [organizationId], references: [id])
-  organizationId String
+  senderUserIdRel User @relation(fields: [senderUserId], references: [id])
+  senderUserId String
+  chatIdRel Chat @relation(fields: [chatId], references: [id])
+  chatId String
   message String
   messageTime DateTime
-  sentFromOrganization Boolean
+  sentFromUser1 Boolean
   
   @@map("messages")
 }
