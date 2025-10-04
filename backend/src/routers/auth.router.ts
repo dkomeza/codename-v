@@ -23,7 +23,7 @@ authRouter.get("/", authenticate, (req, res) => {
   res.status(200).json({ user });
 });
 
-authRouter.post("/login", async (req, res) => {
+authRouter.post("/signin", async (req, res) => {
   const result = LoginSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -42,6 +42,6 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
-authRouter.post("/register", [checkDuplicateEmail], register);
+authRouter.post("/signup", [checkDuplicateEmail], register);
 
 export default authRouter;

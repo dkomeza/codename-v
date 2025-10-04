@@ -1,10 +1,13 @@
-import type { LoginData, SignUpData, AuthToken as Token, User } from "@/types/auth";
+import type { AuthToken, LoginData, SignUpData, AuthToken as Token, User } from "@/types/auth";
 import { validateResponse } from ".";
 import { url } from "./const";
 
-export async function authenticate(): Promise<User> {
+export async function authenticate(data: AuthToken): Promise<User> {
   const response = await fetch(`${url}/auth`, {
     credentials: "include",
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
   });
 
   try {
