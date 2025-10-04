@@ -6,7 +6,15 @@ export type User = {
   name: string;
   surname: string;
   email: string;
+  role: Role;
 };
+
+enum Role {
+  ADMIN = "ADMIN",
+  ORG = "ORG",
+  COORDINATOR = "COORDINATOR",
+  VOLUNTEER = "VOLUNTEER",
+}
 
 export type AuthToken = {
   token: string;
