@@ -1,103 +1,12 @@
 name: codename-v
 
 services:
-  frontend:
-    container_name: codename-v-frontend
-
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-      additional_contexts:
-        - shared=./shared
-    restart: unless-stopped
-
-    networks:
-      - proxy
-
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - ./shared:/shared
-      - /shared/node_modules
-
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "bun",
-          "-e",
-          "fetch('http://localhost:3000').then((r) => {if (r.status !== 200) throw new Error(r.status)})",
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-
-    depends_on:
-      backend:
-        condition: service_healthy
-  backend:
-    container_name: codename-v-backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-      additional_contexts:
-        - shared=./shared
-    restart: unless-stopped
-
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "bun",
-          "-e",
-          "fetch('http://127.0.0.1:5000/health').then((r) => {if (r.status !== 200) throw new Error(r.status)})",
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-      - ./shared:/shared
-      - /shared/node_modules
-
-    networks:
-      - proxy
-      - backend
-
-    depends_on:
-      db:
-        condition: service_healthy
-      cache:
-        condition: service_healthy
-
-  web:
-    container_name: codename-v-web
-    image: nginx:alpine
-    restart: unless-stopped
-
-    ports:
-      - "8080:80"
-
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-
-    networks:
-      - proxy
-
-    depends_on:
-      backend:
-        condition: service_healthy
-      frontend:
-        condition: service_healthy
-
   db:
     container_name: codename-v-db
     image: postgres:13
     restart: unless-stopped
+    ports:
+      - "5432:5432"
 
     environment:
       POSTGRES_USER: codename-v
@@ -114,33 +23,7 @@ services:
       - codename-v-db-data:/var/lib/postgresql/data
     networks:
       - backend
-  cache:
-    container_name: codename-v-redis
-    image: redis:alpine
-    restart: unless-stopped
-    command: redis-server --save 60 1 --appendonly yes
-
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
-    networks:
-      - backend
-
-    volumes:
-      - codename-v-redis-data:/data
-
-networks:
-  proxy:
-    driver: bridge
-  backend:
-    internal: true
 
 volumes:
   codename-v-db-data:
-    driver: local
-  codename-v-redis-data:
     driver: local

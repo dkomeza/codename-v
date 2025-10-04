@@ -10,6 +10,12 @@ export default defineConfig({
     port: 3000,
     host: "0.0.0.0",
     strictPort: true,
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000/",
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
     watch: {
       usePolling: true,
       interval: 100,
@@ -18,7 +24,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@shared": "/shared",
+      "@shared": path.resolve(__dirname, "../shared"),
     },
   },
 });
