@@ -1,6 +1,6 @@
 import { signJWT } from "@/services/auth.service";
 import { PrismaClient } from "@prisma/client";
-import { SignUpSchema } from "@shared/schemas/auth.schema";
+import type { SignUpData } from "@shared/types/auth";
 
 const prisma = new PrismaClient();
 
@@ -24,35 +24,21 @@ export const getUserByToken = async (req: any, res: any) => {
   }
 };
 
-export const register = async (req: any, res: any) => {
-  try {
-    const parse = SignUpSchema.safeParse(req.body);
+export const register = async (data: SignUpData) => {
+  const hashedPassword = await Bun.password.hash(data.password);
 
-    if (!parse.success) {
-      return res.status(400).json({ message: "Invalid request data", errors: parse.error.message });
-    }
+  const newUser = await prisma.user.create({
+    data: {
+      name: data.name,
+      surname: data.surname,
+      email: data.email,
+      password: hashedPassword,
+      type: "VOLUNTEER",
+      birthDate: data.birthDate,
+    },
+  });
 
-    const { name, surname, email, password, birthDate } = parse.data;
-
-    const user = await prisma.user.create({
-      data: {
-        name: name,
-        surname: surname,
-        email: email,
-        password: Bun.password.hashSync(password, {
-          algorithm: "bcrypt",
-          cost: 12,
-        }),
-        birthDate: birthDate,
-      },
-    });
-
-    const token = signJWT(user.id);
-
-    res.status(201).json({ token });
-  } catch (e: any) {
-    res.status(500).json({ message: e.message });
-  }
+  return signJWT(newUser.id);
 };
 
 export const login = async (email: string, password: string) => {
