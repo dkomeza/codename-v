@@ -37,6 +37,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -70,12 +79,12 @@ const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "imie",
+    accessorKey: "name",
     header: "Imię",
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "nazwisko",
+    accessorKey: "surname",
     header: "Nazwisko",
     cell: ({ row }) => <div className="capitalize">{row.getValue("surname")}</div>,
   },
@@ -95,7 +104,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
-    accessorKey: "typ",
+    accessorKey: "type",
     header: "Typ",
     cell: ({ row }) => <div className="capitalize">{row.getValue("type")}</div>,
   },
@@ -183,20 +192,32 @@ export function Users() {
               </DialogHeader>
               <div className="grid gap-4">
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">Email</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input id="email" name="email" defaultValue="Email" />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">Imię</Label>
+                  <Label htmlFor="name">Imię</Label>
                   <Input id="name" name="name" defaultValue="Imię" />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">Nazwisko</Label>
+                  <Label htmlFor="surname">Nazwisko</Label>
                   <Input id="surname" name="surname" defaultValue="Nazwisko" />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="name-1">Typ</Label>
-                  <Input id="type" name="type" defaultValue="Typ" />
+                  <Label htmlFor="type">Typ</Label>
+                  <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Wybierz typ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Typy</SelectLabel>
+                        <SelectItem value="ADMIN">Administrator</SelectItem>
+                        <SelectItem value="COORDINATOR">Koordynator</SelectItem>
+                        <SelectItem value="VOLUNTEER">Wolontariusz</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <DialogFooter>
@@ -205,7 +226,10 @@ export function Users() {
                     Anuluj
                   </Button>
                 </DialogClose>
-                <Button type="submit" className="cursor-pointer">
+                <Button
+                  type="submit"
+                  className="cursor-pointer"
+                >
                   Zapisz
                 </Button>
               </DialogFooter>
@@ -217,7 +241,7 @@ export function Users() {
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
+            placeholder="Filtruj emaile..."
             value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
             onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
             className="max-w-sm"
@@ -305,7 +329,7 @@ export function Users() {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              następne
+              Następne
             </Button>
           </div>
         </div>
