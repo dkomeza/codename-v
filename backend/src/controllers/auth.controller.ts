@@ -10,11 +10,11 @@ export const getUserByToken = async (req: any, res: any) => {
         id: true,
         name: true,
         surname: true,
-        email: true
+        email: true,
       },
       where: {
-        id: res.locals.userId
-      }
+        id: res.locals.userId,
+      },
     });
 
     res.status(200).json(user);
@@ -35,46 +35,37 @@ export const register = async (req: any, res: any) => {
         type: type,
         password: Bun.password.hashSync(password, {
           algorithm: "bcrypt",
-          cost: 12
+          cost: 12,
         }),
         organizationId: organizationId,
-        birthDate: birthDate
+        birthDate: birthDate,
       },
     });
-        
+
     res.status(201).json(user);
-    
   } catch (e: any) {
     res.status(500).json({ message: e.message });
   }
 };
 
-export const login = async (req: any, res: any) => {
-  try {
-    const { email, password } = req.body;
+export const login = async (email: string, password: string) => {
+  const userFound = await prisma.user.findFirst({
+    select: {
+      id: true,
+      password: true,
+    },
+    where: {
+      email: email,
+    },
+  });
 
-    const userFound = await prisma.user.findFirst({
-      select: {
-        id: true,
-        password: true
-      },
-      where: {
-        email: email
-      }
-    });
-
-    if (!userFound) {
-      res.status(404).json({ message: 'User not found!' });
-    }
-
-    if (!await Bun.password.verify(userFound!.password, password)) {
-      res.status(401).json({ message: 'Invalid password!' });
-    }
-
-    res.status(200).json({
-      token: signJWT(userFound!.id)
-    });
-  } catch (e: any) {
-    res.status(500).json({ message: e.message });
+  if (!userFound) {
+    throw new Error("Invalid password or email!");
   }
+
+  if (!(await Bun.password.verify(userFound!.password, password))) {
+    throw new Error("Invalid password or email!");
+  }
+
+  return signJWT(userFound.id);
 };
