@@ -21,8 +21,6 @@ services:
 
     volumes:
       - codename-v-db-data:/var/lib/postgresql/data
-    networks:
-      - backend
 
 volumes:
   codename-v-db-data:
