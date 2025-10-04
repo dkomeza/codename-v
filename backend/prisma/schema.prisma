@@ -89,3 +89,19 @@ model Message {
   
   @@map("messages")
 }
+
+  model School {
+  id        String     @id @default(cuid())
+  objectid  Int     @unique
+  name      String
+  street    String?
+  building  String?
+  postal    String?
+  phone     String?
+  email     String?
+  www       String?
+  type      String? 
+  updatedAt DateTime
+  addedAt   DateTime
+}
+

@@ -1,14 +1,18 @@
 import { getPackageVersion } from "@/config/server.config";
 import type { HealthCheckResponse } from "@shared/types";
 import express from "express";
+import cron from "node-cron";
 import authRouter from "./routers/auth.router";
+import { schoolRouter } from "./routers/school.router";
+import { checkSchools, syncSchools } from "./services/msip.service";
 
 const app = express();
 const PORT = Bun.env.PORT || 5000;
 const VERSION = getPackageVersion();
 
 app.use(express.json());
-app.use('/auth/', authRouter);
+app.use("/auth/", authRouter);
+app.use("/schools/", schoolRouter);
 
 // Required to make sure that the container is healthy
 app.get("/health", (_req, res) => {
@@ -21,6 +25,16 @@ app.get("/health", (_req, res) => {
   res.json(healthCheckResponse);
 });
 
+cron.schedule("0 2 * * *", async () => {
+  try {
+    await syncSchools();
+  } catch (err) {
+    console.error("❌ School sync failed:", err);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+
+  checkSchools();
 });

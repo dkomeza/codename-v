@@ -5,7 +5,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "bun run --hot src/app.ts",
+    "dev": "bun run --watch src/app.ts",
     "seed": "ts-node prisma/seed/seed.ts"
   },
   "devDependencies": {
@@ -21,6 +21,7 @@
     "@prisma/client": "5.13.0",
     "express": "^4.19.2",
     "ioredis": "^5.6.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^4.2.1"
   }
 }
