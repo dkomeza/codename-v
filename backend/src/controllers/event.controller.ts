@@ -1,8 +1,45 @@
 import prisma from "@/config/postgres.config";
 import type { Event } from "@shared/types/event.types";
 
+export async function getEvents(page: number, pageSize: number) {
+  const events = await prisma.event.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: {
+      date: "desc",
+    },
+    select: {
+      id: true,
+      title: true,
+      images: true,
+      location: true,
+      date: true,
+      description: false,
+      capacity: false,
+    },
+  });
+
+  const totalEvents = await prisma.event.count();
+
+  return {
+    events,
+    totalPages: Math.ceil(totalEvents / pageSize),
+    currentPage: page,
+  };
+}
+
 export async function saveEvent(eventData: Event) {
-  const event = await prisma.event.create({ data: eventData });
+  const category = await prisma.eventCategory.findUnique({
+    where: { name: eventData.category },
+  });
+
+  if (!category) {
+    throw new Error("Invalid category");
+  }
+
+  const event = await prisma.event.create({
+    data: { ...eventData, categoryId: category.id, organizationId: "0" },
+  });
 
   const urls: {
     secret: string;

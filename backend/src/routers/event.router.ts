@@ -1,4 +1,4 @@
-import { getUploadByUrl, saveEvent } from "@/controllers/event.controller";
+import { getEvents, getUploadByUrl, saveEvent } from "@/controllers/event.controller";
 import { saveFile } from "@/services/file.service";
 import { EventSchema } from "@shared/schemas/event.schema";
 import { Router } from "express";
@@ -7,7 +7,13 @@ import multer from "multer";
 export const eventRouter = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-eventRouter.get("/", async (req, res) => {});
+eventRouter.get("/", async (req, res) => {
+  const page = parseInt(req.query.page as string) || 1;
+  const pageSize = parseInt(req.query.pageSize as string) || 20;
+  const { events, totalPages, currentPage } = await getEvents(page, pageSize);
+
+  res.json({ events, totalPages, currentPage });
+});
 
 eventRouter.post("/", async (req, res) => {
   const result = EventSchema.safeParse(req.body);

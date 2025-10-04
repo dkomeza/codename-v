@@ -9,4 +9,5 @@ export const EventSchema = z.object({
   }),
   capacity: z.number().min(1),
   location: z.string().min(1).max(200), // GPS coordinates or address
+  category: z.string().min(1).max(200),
 });

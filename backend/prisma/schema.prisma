@@ -34,15 +34,27 @@ model User {
 
 model Event {
   id             String @id @default(cuid())
-  topic          String
-  startDate      DateTime
-  endTime        DateTime
-  requirements   String
+  title          String
+  images         String[]
+  capacity       Int
+  location       String
+  description    String?
+  date           DateTime
+
+  categoryIdRel EventCategory @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  
   orgIdRel Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
   Application Application[]
   @@map("events")
+}
+
+model EventCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  events    Event[]
 }
 
 model Organization {
