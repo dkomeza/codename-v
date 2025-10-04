@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id              String   @id @default(cuid())
-  type            Int
+  type            UserType @default(VOLUNTEER)
   email           String
   password        String
 
@@ -30,6 +30,13 @@ model User {
   Message Message[]
 
   @@map("users")
+}
+
+enum UserType {
+  ADMIN
+  ORG
+  COORDINATOR
+  VOLUNTEER
 }
 
 model Event {

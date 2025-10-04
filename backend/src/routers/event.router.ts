@@ -1,10 +1,13 @@
 import { getEvents, getUploadByUrl, saveEvent } from "@/controllers/event.controller";
+import { authenticate } from "@/middleware/auth.middleware";
 import { saveFile } from "@/services/file.service";
 import { EventSchema } from "@shared/schemas/event.schema";
 import { Router } from "express";
 import multer from "multer";
 
 export const eventRouter = Router();
+eventRouter.use(authenticate);
+
 const upload = multer({ storage: multer.memoryStorage() });
 
 eventRouter.get("/", async (req, res) => {

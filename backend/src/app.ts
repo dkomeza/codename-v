@@ -2,9 +2,7 @@ import { getPackageVersion } from "@/config/server.config";
 import type { HealthCheckResponse } from "@shared/types";
 import * as express from "express";
 import cron from "node-cron";
-import authRouter from "./routers/auth.router";
-import { eventRouter } from "./routers/event.router";
-import { schoolRouter } from "./routers/school.router";
+import { authRouter, eventRouter, schoolRouter } from "./routers";
 import { checkSchools, syncSchools } from "./services/msip.service";
 
 const app = express();
