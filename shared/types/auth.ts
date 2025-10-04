@@ -9,12 +9,7 @@ export type User = {
   role: Role;
 };
 
-enum Role {
-  ADMIN = "ADMIN",
-  ORG = "ORG",
-  COORDINATOR = "COORDINATOR",
-  VOLUNTEER = "VOLUNTEER",
-}
+type Role = "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 
 export type AuthToken = {
   token: string;
