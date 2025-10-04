@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import NotificationMenu from '@/components/notifications/notificationMenu';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Clock, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, Clock, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 
 type Event = {
   id: number;
@@ -12,19 +12,15 @@ type Event = {
   location: string;
   image: string;
   category: string;
+  favourite: boolean
 };
 
 // konieczna zamiana statycznych danych na pobierane
 const events: Event[] = [
-  { id: 1, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 12, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 8, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 33, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 13, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 1111, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 2, title: "Sprzątanie parku", date: "Null", location: "Null", image: "pigeon.png", category: "Ochrona Środowiska" },
-  { id: 3, title: "Spotkanie organizacyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane" },
-  { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna" },
+  { id: 1, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favourite: true },
+  { id: 2, title: "Sprzątanie parku", date: "Null", location: "Null", image: "pigeon.png", category: "Ochrona Środowiska", favourite: false },
+  { id: 3, title: "Spotkanie organizacyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favourite: true },
+  { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna", favourite: false },
 ];
 
 function Dashboard() {
@@ -33,9 +29,18 @@ function Dashboard() {
     [events]
   );
 
+  const [favouriteEvents, setFavouriteEvents] = useState<Event[]>(events);
+  const toggleFavourite = (id: number) => {
+    setFavouriteEvents(prev =>
+      prev.map(ev =>
+        ev.id === id ? { ...ev, favourite: !ev.favourite } : ev
+      )
+    );
+  };
+
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const filteredEvents = events.filter(e => e.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredEvents = favouriteEvents.filter(e => e.title.toLowerCase().includes(query.toLowerCase()));
 
   const [scrollIndices, setScrollIndices] = useState<{ [key: string]: number }>(
     categories.reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {})
@@ -117,6 +122,18 @@ function Dashboard() {
                 >
                   {events.map(event => (
                     <div key={event.id} className="relative w-64 h-64 flex-shrink-0 mr-4 rounded-lg overflow-hidden cursor-pointer shadow-lg select-none">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFavourite(event.id);
+                        }}
+                        className="absolute top-2 right-2 p-1 rounded-full bg-white/70 hover:bg-black/10 transition-colors"
+                      >
+                        <Heart
+                          className={`w-6 h-6 ${event.favourite ? "fill-red-500 text-red-500" : "text-red-500"
+                            }`}
+                        />
+                      </button>
                       <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
                       <div className="absolute bottom-0 w-full bg-black bg-opacity-80 backdrop-blur-sm p-2 text-white flex flex-col">
                         <p className="font-semibold truncate select-text">{event.title}</p>
