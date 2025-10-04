@@ -2,6 +2,10 @@ FROM oven/bun:debian
 
 RUN apt-get update -y && apt-get install -y openssl
 
+RUN apt-get update && apt-get install -y curl \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs
+
 WORKDIR /shared
 
 COPY --from=shared . .
@@ -15,6 +19,6 @@ COPY src ./src
 COPY tsconfig.json .
 COPY .env .
 
-RUN bunx prisma generate
+RUN npx prisma generate
 
 CMD ["bun", "dev"]
