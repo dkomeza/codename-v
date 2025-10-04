@@ -5,6 +5,7 @@ import cron from "node-cron";
 import authRouter from "./routers/auth.router";
 import { schoolRouter } from "./routers/school.router";
 import { checkSchools, syncSchools } from "./services/msip.service";
+import chatRouter from "./routers/chat.router";
 
 const app = express();
 const PORT = Bun.env.PORT || 5000;
@@ -13,6 +14,7 @@ const VERSION = getPackageVersion();
 app.use(express.json());
 app.use("/auth/", authRouter);
 app.use("/schools/", schoolRouter);
+app.use('/chat/', chatRouter);
 
 // Required to make sure that the container is healthy
 app.get("/health", (_req, res) => {
