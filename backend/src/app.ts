@@ -1,6 +1,6 @@
 import { getPackageVersion } from "@/config/server.config";
 import type { HealthCheckResponse } from "@shared/types";
-import * as express from "express";
+import express from "express";
 import cron from "node-cron";
 import { authRouter, eventRouter, schoolRouter } from "./routers";
 import { checkSchools, syncSchools } from "./services/msip.service";

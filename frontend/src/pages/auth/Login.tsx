@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EmailRounded, KeyRounded, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
@@ -23,6 +24,7 @@ const loginSchema = z.object({
 
 export function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const { signIn } = useAuth();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -33,7 +35,9 @@ export function Login() {
   });
 
   function onSubmit(data: z.infer<typeof loginSchema>) {
-    console.log(data);
+    signIn(data).catch((err) => {
+      console.error("Login failed", err);
+    });
   }
 
   return (

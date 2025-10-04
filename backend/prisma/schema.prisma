@@ -21,8 +21,8 @@ model User {
 
   name            String
   surname         String
-  orgIdRel Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
+  orgIdRel Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
   birthDate      DateTime
   chats Chat[]
 
@@ -50,7 +50,7 @@ model Event {
 
   categoryIdRel EventCategory @relation(fields: [categoryId], references: [id])
   categoryId    String
-  
+
   orgIdRel Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
@@ -105,7 +105,7 @@ model Message {
   chatId String
   message String
   messageTime DateTime
-  
+
   @@map("messages")
 }
 
@@ -119,7 +119,7 @@ model Message {
   phone     String?
   email     String?
   www       String?
-  type      String? 
+  type      String?
   updatedAt DateTime
   addedAt   DateTime
 }

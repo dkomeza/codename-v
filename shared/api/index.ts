@@ -9,7 +9,16 @@ import { url } from "./const";
  */
 export async function validateResponse<Type>(response: Response): Promise<Type> {
   if (!response.ok) {
-    throw new Error("Failed to fetch");
+    if (
+      response.headers.has("content-type") &&
+      response.headers.get("content-type")?.includes("application/json")
+    ) {
+      const errorBody = (await response.json()) as any;
+      const errorMessage = errorBody.message || "Unknown error";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
   }
 
   if (

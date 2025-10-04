@@ -1,13 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
-import { authenticate, signIn, signOut, signUp } from "@shared/api/auth";
-import type { User } from "@shared/types/auth";
+import { authenticate, signIn, signUp } from "@shared/api/auth";
+import type { LoginData, SignUpData, User } from "@shared/types/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name?: string) => Promise<void>;
+  signIn: (data: LoginData) => Promise<void>;
+  signUp: (data: SignUpData) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -19,21 +19,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // On mount, check if user is logged in
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await authenticate();
-        setUser(user);
-      } catch (err) {
-        console.error("Auth check failed", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
+    authenticationHandler().finally(() => setLoading(false));
   }, []);
 
+  const authenticationHandler = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setUser(null);
+      return;
+    }
+
+    try {
+      const user = await authenticate({ token });
+      setUser(user);
+    } catch (err) {
+      console.error("Authentication failed", err);
+      localStorage.removeItem("authToken");
+      setUser(null);
+    }
+  };
+  const signInHandler = async (data: LoginData) => {
+    const token = await signIn(data);
+    localStorage.setItem("authToken", token.token);
+
+    authenticationHandler();
+  };
+
+  const signUpHandler = async (data: SignUpData) => {
+    const token = await signUp(data);
+    localStorage.setItem("authToken", token.token);
+
+    authenticationHandler();
+  };
+
+  const signOutHandler = async () => {
+    localStorage.removeItem("authToken");
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        signIn: signInHandler,
+        signUp: signUpHandler,
+        signOut: signOutHandler,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
