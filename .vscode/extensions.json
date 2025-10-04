@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "pranaygp.vscode-css-peek",
+    "usernamehw.errorlens",
+    "dsznajder.es7-react-js-snippets",
+    "esbenp.prettier-vscode",
+    "YoavBls.pretty-ts-errors",
+    "Prisma.prisma",
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint"
+  ]
+}

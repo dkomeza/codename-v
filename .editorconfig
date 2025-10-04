@@ -1,0 +1,29 @@
+# top-most EditorConfig file
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Default indentation
+indent_style = space
+indent_size = 2
+
+# JSON, YAML, Markdown → 2 spaces
+[*.{json,yml,yaml,md}]
+indent_size = 2
+
+# JavaScript, TypeScript, React
+[*.{js,jsx,ts,tsx}]
+indent_size = 2
+
+# HTML & CSS
+[*.{html,css,scss}]
+indent_size = 2
+
+# Python → 4 spaces (PEP 8)
+[*.py]
+indent_size = 4

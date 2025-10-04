@@ -1,0 +1,13 @@
+FROM oven/bun:debian
+
+WORKDIR /app
+
+COPY package.json .
+RUN bun install
+
+COPY public .
+COPY src .
+COPY tsconfig.json .
+COPY vite.config.ts .
+
+CMD ["bun", "dev"]

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "zenn",
+  "module": "app.ts",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "bun run --hot src/app.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "prisma": "5.13.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "5.13.0",
+    "express": "^4.19.2",
+    "ioredis": "^5.6.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

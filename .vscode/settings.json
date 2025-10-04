@@ -1,0 +1,15 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always",
+    "source.fixAll.eslint": "always"
+  },
+
+  // Better JS/TS/React editing
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+}
