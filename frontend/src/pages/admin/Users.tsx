@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/table";
 import { fetchUsers } from "@shared/api/admin";
 import { User } from "@shared/types/admin.types";
+import NewUserForm from "./components/NewUserForm";
 
 const PAGE_SIZE = 50;
 
@@ -171,7 +172,9 @@ export function Users() {
     <div className="p-8 space-y-8 w-full">
       <div className="flex flex-row justify-between">
         <h1 className="text-2xl font-bold mb-4">Użytkownicy</h1>
-        <Dialog></Dialog>
+        <Dialog>
+          <NewUserForm />
+        </Dialog>
       </div>
 
       <div className="w-full">
