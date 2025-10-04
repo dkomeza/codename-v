@@ -5,8 +5,14 @@ export const schoolRouter = Router();
 
 // GET /schools
 schoolRouter.get("/", async (req, res) => {
+  const page = parseInt(req.query.page as string) || 1;
+  const pageSize = parseInt(req.query.pageSize as string) || 50;
+
+  const skip = (page - 1) * pageSize;
+
   const schools = await prisma.school.findMany({
-    take: 50,
+    take: pageSize,
+    skip,
     orderBy: { name: "asc" },
   });
   res.json(schools);
