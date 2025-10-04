@@ -37,6 +37,8 @@ import {
 import { fetchUsers } from "@shared/api/admin";
 import { User } from "@shared/types/admin.types";
 
+const PAGE_SIZE = 50;
+
 const columns: ColumnDef<User>[] = [
   {
     id: "select",
@@ -124,14 +126,26 @@ export function Users() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [users, setUsers] = React.useState<User[]>([]);
+  const [pageNumber, setPageNumber] = React.useState(1);
 
   React.useEffect(() => {
-    fetchUsers({ limit: 50, page: 1, token: localStorage.getItem("authToken") || "" }).then(
+    fetchUsers({ limit: PAGE_SIZE, page: 1, token: localStorage.getItem("authToken") || "" }).then(
       (users) => {
+        console.log(users);
         setUsers(users);
       }
     );
   }, []);
+
+  React.useEffect(() => {
+    fetchUsers({
+      limit: PAGE_SIZE,
+      page: pageNumber,
+      token: localStorage.getItem("authToken") || "",
+    }).then((users) => {
+      setUsers(users);
+    });
+  }, [pageNumber]);
 
   const table = useReactTable<User>({
     data: users,
@@ -144,6 +158,7 @@ export function Users() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: () => {},
     state: {
       sorting,
       columnFilters,
@@ -239,16 +254,16 @@ export function Users() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() => setPageNumber(pageNumber - 1)}
+              disabled={pageNumber === 1}
             >
               Poprzednie
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={() => setPageNumber(pageNumber + 1)}
+              disabled={users.length < PAGE_SIZE}
             >
               Następne
             </Button>
