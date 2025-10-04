@@ -1,15 +1,13 @@
-import { url } from "./const";
-import "../types";
 import type { HealthCheckResponse } from "@/types";
+import "../types";
+import { url } from "./const";
 
 /**
  * Validates the response from the server
  * @param response  The response from the server
  * @returns       The response body
  */
-export async function validateResponse<Type>(
-  response: Response
-): Promise<Type> {
+export async function validateResponse<Type>(response: Response): Promise<Type> {
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }
@@ -31,7 +29,7 @@ export async function validateResponse<Type>(
   const data = body as Type;
 
   for (const key in data) {
-    if (data[key] === undefined) {
+    if (data[key] === undefined || data[key] === null) {
       throw new Error("Invalid response body");
     }
   }

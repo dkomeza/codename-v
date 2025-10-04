@@ -1,3 +1,6 @@
+import type { LoginSchema, SignUpSchema } from "@/schemas/auth.schema";
+import { z } from "zod";
+
 export type User = {
   id: string;
   name: string;
@@ -5,16 +8,9 @@ export type User = {
   email: string;
 };
 
-export type LoginData = {
-  email: string;
-  password: string;
+export type AuthToken = {
+  token: string;
 };
 
-export type SignUpData = {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  birthDate: Date;
-  school: string;
-};
+export type LoginData = z.infer<typeof LoginSchema>;
+export type SignUpData = z.infer<typeof SignUpSchema>;
