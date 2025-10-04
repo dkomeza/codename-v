@@ -1,5 +1,6 @@
 import { signJWT } from "@/services/auth.service";
 import { PrismaClient } from "@prisma/client";
+import type { SignUpData } from "@shared/types/auth";
 
 const prisma = new PrismaClient();
 
@@ -23,29 +24,21 @@ export const getUserByToken = async (req: any, res: any) => {
   }
 };
 
-export const register = async (req: any, res: any) => {
-  try {
-    const { name, surname, email, type, password, organizationId, birthDate } = req.body;
+export const register = async (data: SignUpData) => {
+  const hashedPassword = await Bun.password.hash(data.password);
 
-    const user = await prisma.user.create({
-      data: {
-        name: name,
-        surname: surname,
-        email: email,
-        type: type,
-        password: Bun.password.hashSync(password, {
-          algorithm: "bcrypt",
-          cost: 12,
-        }),
-        organizationId: organizationId,
-        birthDate: birthDate,
-      },
-    });
+  const newUser = await prisma.user.create({
+    data: {
+      name: data.name,
+      surname: data.surname,
+      email: data.email,
+      password: hashedPassword,
+      type: data.type,
+      birthDate: data.birthDate,
+    },
+  });
 
-    res.status(201).json(user);
-  } catch (e: any) {
-    res.status(500).json({ message: e.message });
-  }
+  return signJWT(newUser.id);
 };
 
 export const login = async (email: string, password: string) => {
@@ -63,7 +56,7 @@ export const login = async (email: string, password: string) => {
     throw new Error("Invalid password or email!");
   }
 
-  if (!(await Bun.password.verify(userFound!.password, password))) {
+  if (!(await Bun.password.verify(password, userFound!.password))) {
     throw new Error("Invalid password or email!");
   }
 

@@ -1,5 +1,6 @@
 import { Login, Signup } from "@/pages/auth";
 import OrgDashboard from "@/pages/dashboard/OrgDashboard";
+import AdminRouter from "@/routers/AdminRouter";
 import UserRouter from "@/routers/UserRouter";
 import { Route, Routes } from "react-router";
 import { AuthProvider } from "./context/AuthContext";
@@ -10,6 +11,7 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/*" element={<UserRouter />} />
+        <Route path="/admin/*" element={<AdminRouter />} />
 
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />

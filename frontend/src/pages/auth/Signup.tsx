@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EmailRounded,
@@ -17,43 +18,16 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { SignUpSchema } from "@shared/schemas/auth.schema";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const passwordSchema = z
-  .string()
-  .min(8, { message: "Hasło musi mieć conajmniej 8 znaków" })
-  .max(128, { message: "Hasło może mieć maksymalnie 128 znaków" })
-  .regex(/[A-Z]/, "Hasło musi zawierać przynajmniej jedną wielką literę")
-  .regex(/[a-z]/, "Hasło musi zawierać przynajmniej jedną małą literę")
-  .regex(/[0-9]/, "Hasło musi zawierać przynajmniej jedną cyfrę")
-  .refine((s) => !/\s/.test(s), "Hasło nie może zawierać spacji");
-
-const registerSchema = z
-  .object({
-    name: z.string().min(2, { message: "Imię musi mieć conajmniej 2 znaki" }),
-    surname: z.string().min(2, { message: "Nazwisko musi mieć conajmniej 2 znaki" }),
-    password: passwordSchema,
-    confirmPassword: z.string().min(1, { message: "Potwierdź hasło" }),
-    email: z.email({
-      error: "Podaj poprawny adres email",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Hasła muszą być takie same",
-  });
-
 type TabProps = {
-  form: ReturnType<typeof useForm<z.infer<typeof registerSchema>>>;
+  form: ReturnType<typeof useForm<z.infer<typeof SignUpSchema>>>;
   setTab: (tab: (typeof tabs)[number]) => void;
 };
 function InfoTab({ form, setTab }: TabProps) {
-  useEffect(() => {
-    console.log("touched", form.formState.touchedFields);
-  }, [form]);
-
   return (
     <div className="space-y-4">
       <div className="flex gap-4">
@@ -260,18 +234,22 @@ const tabs = ["info", "password", "personal"] as const;
 
 export function Signup() {
   const [tab, setTab] = useState<(typeof tabs)[number]>(tabs[0]);
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
       name: "Dawid",
       surname: "Komęza",
       email: "dawid.komeza@gmail.com",
-      password: "",
+      password: "ZAQ!2wsx",
+      confirmPassword: "ZAQ!2wsx",
+      birthDate: "2003-04-25",
     },
   });
 
-  function onSubmit(data: z.infer<typeof registerSchema>) {
-    console.log("chuj", data);
+  const { signUp } = useAuth();
+
+  function onSubmit(data: z.infer<typeof SignUpSchema>) {
+    signUp(data);
   }
 
   return (
