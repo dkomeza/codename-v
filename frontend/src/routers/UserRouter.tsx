@@ -1,16 +1,19 @@
 import { useAuth } from "@/context/AuthContext";
-import { Navigate, Route, Routes } from "react-router";
+import MainLayout from "@/pages/main/MainLayout";
+import { Route, Routes } from "react-router";
 
 export default function UserRouter() {
   const { user } = useAuth();
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!user) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return (
     <Routes>
-      <Route path="/dashboard" element={<div>Dashboard</div>} />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<div>Dashboard</div>} />
+      </Route>
     </Routes>
   );
 }
