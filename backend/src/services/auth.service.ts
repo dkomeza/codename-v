@@ -34,38 +34,7 @@ type JWTPayload = {
   id: string
 };
 
-export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers['x-access-token'] || req.headers['authorization'];
 
-  if (!token) {
-    res.status(403).json({message: 'Token not provided!'});
-  }
-
-  try {
-    const data = jwt.verify((token as string).replace('Bearer ', ''), JWT_SECRET) as JWTPayload;
-
-    const userFound = prisma.user.findFirst({
-      select: {
-        id: true,
-        type: true
-      },
-      where: {
-        id: data.id
-      }
-    });
-
-    res.locals.userId = userFound.id;
-    res.locals.userType = userFound.type;
-
-    if (!userFound) {
-      res.status(401).json({message: 'User not present in database!'});
-    }
-
-    next();
-  } catch(e: any) {
-    res.status(500).json({message: e.message});
-  }
-};
 
 export const signJWT = (userId: string) => {
   return jwt.sign({id: userId}, JWT_SECRET, {
