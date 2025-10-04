@@ -28,6 +28,7 @@ function AdminLayout() {
             key={page.name}
             to={page.href}
             className="p-4 hover:bg-gray-200 text-[#707070] aria-[current=page]:text-[#8C2342] flex flex-col items-center"
+            end
           >
             <page.icon />
             <span className="text-xs font-light mt-2">{page.name}</span>
