@@ -105,3 +105,10 @@ model Message {
   addedAt   DateTime
 }
 
+model SecureUpload {
+  id        String   @id @default(cuid())
+  secret    String   @unique
+  filename  String
+  url       String
+}
+
