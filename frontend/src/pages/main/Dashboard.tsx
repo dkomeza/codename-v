@@ -1,9 +1,9 @@
 import React from 'react'
-import NotificationDropMenu from '@/components/notifications/notificationDropMenu'
+import NotificationMenu from '@/components/notifications/notificationMenu'
 
 function Dashboard() {
   return (
-      <NotificationDropMenu></NotificationDropMenu>
+      <NotificationMenu></NotificationMenu>
   )
 }
 

@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
+import Dashboard from "@/pages/main/Dashboard";
 import MainLayout from "@/pages/main/MainLayout";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 
 export default function UserRouter() {
   const { user } = useAuth();
@@ -12,7 +13,7 @@ export default function UserRouter() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<div>Dashboard</div>} />
+        <Route path="/" element={<Dashboard />} />
       </Route>
     </Routes>
   );
