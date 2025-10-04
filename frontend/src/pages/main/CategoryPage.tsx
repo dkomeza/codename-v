@@ -38,7 +38,7 @@ function CategoryPage() {
 
       <h2 className="text-xl font-semibold">{categoryName}</h2>
 
-      <div className="flex flex-wrap gap-4 justify-start">
+      <div className="flex flex-col gap-4 justify-start">
         {filteredEvents.map(event => (
           <div key={event.id} className="relative w-64 h-64 rounded-lg overflow-hidden shadow-lg select-none">
             <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
