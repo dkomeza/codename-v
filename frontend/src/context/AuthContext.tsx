@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { authenticate } from "@shared/api/auth";
+import { authenticate, signIn, signOut, signUp } from "@shared/api/auth";
 import type { User } from "@shared/types/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ type AuthContextType = {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name?: string) => Promise<void>;
-  logout: () => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,8 +33,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
