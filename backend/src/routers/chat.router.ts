@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 // import { authenticate } from "../services/auth.service";
-import { getChats, getUser } from "@/controllers/chat.controller";
+import { getChats, getUser, loadChat } from "@/controllers/chat.controller";
 import { verifyToken } from "@/services/auth.service";
 import jwt, { decode } from 'jsonwebtoken';
 
@@ -39,9 +39,14 @@ chatRouter.get("/chats", [verifyToken] ,async (req: any, res: any)=>{
   	}
 })
 
-chatRouter.post("/new", (req, res)=>{
-	res.send({})
+chatRouter.get("/loadChat", [verifyToken], async (req:any, res:any)=>{
+	try{
+		const chatId = req.body.chatId
+		const messages = await loadChat(chatId)
+		res.json(messages)
+	}catch (error: any) {
+    	res.status(400).send({ error: error.message });
+  	}
 })
-
 
 export default chatRouter

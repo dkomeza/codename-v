@@ -6,6 +6,8 @@ import authRouter from "./routers/auth.router";
 import { schoolRouter } from "./routers/school.router";
 import { checkSchools, syncSchools } from "./services/msip.service";
 import chatRouter from "./routers/chat.router";
+import { Server, Socket } from 'socket.io';
+import { handleSocketIo } from "./services/chat.service";
 
 const app = express();
 const PORT = Bun.env.PORT || 5000;
@@ -35,8 +37,15 @@ cron.schedule("0 2 * * *", async () => {
   }
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 
   checkSchools();
 });
+
+const io = new Server(server, {
+  // path: "/ws",
+  cors: { origin: "*" },
+});
+
+io.on("connect", handleSocketIo)
