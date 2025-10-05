@@ -122,7 +122,7 @@ function Dashboard() {
                 >
                   {events.map(event => (
                     <div key={event.id} className="relative w-64 h-64 flex-shrink-0 mr-4 rounded-lg overflow-hidden cursor-pointer shadow-lg select-none"
-                    onClick={() => navigate(`/event/${encodeURIComponent(event.id)}`)} 
+                      onClick={() => navigate(`/event/${encodeURIComponent(event.id)}`)}
                     >
                       <button
                         onClick={(e) => {
