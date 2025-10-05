@@ -18,9 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { NewUserSchema } from "@shared/schemas/admin.schema";
-// Ensure NewUserSchema defines birthDate as z.date()
 import {
   Form,
   FormControl,
@@ -30,24 +27,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createUser } from "@shared/api/admin";
+import { NewUserSchema } from "@shared/schemas/admin.schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-function NewUserForm() {
+type NewUserFormProps = {
+  fetchData: () => void;
+};
+
+function NewUserForm(props: NewUserFormProps) {
   const form = useForm<z.infer<typeof NewUserSchema>>({
-    resolver: zodResolver(NewUserSchema),
+    resolver: zodResolver(
+      NewUserSchema.extend({
+        birthDate: z.date(),
+      })
+    ),
     defaultValues: {
-      email: "",
-      name: "",
-      surname: "",
-      password: "",
+      email: "asdf@sadf.asdf",
+      name: "Jan",
+      surname: "Kowalski",
+      password: "passwordasdf1A",
       type: "VOLUNTEER",
       birthDate: new Date(),
     },
   });
 
-  function handleFormSubmit(data: z.infer<typeof NewUserSchema>) {
-    console.log("Dodano użytkownika (nieprawdziwe)", data);
+  async function handleFormSubmit(data: z.infer<typeof NewUserSchema>) {
+    try {
+      await createUser({ ...data, token: localStorage.getItem("authToken") || "" });
+    } catch (e) {
+      console.error("Failed to create user:", e);
+    }
+
+    form.reset();
+    props.fetchData();
   }
 
   return (
@@ -171,14 +186,16 @@ function NewUserForm() {
                 Anuluj
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              className="cursor-pointer"
-              disabled={!form.formState.isValid}
-              onClick={() => form.handleSubmit(handleFormSubmit)()}
-            >
-              Zapisz
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="cursor-pointer"
+                disabled={!form.formState.isValid}
+                onClick={() => form.handleSubmit(handleFormSubmit)()}
+              >
+                Zapisz
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </DialogContent>
       </form>

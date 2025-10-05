@@ -43,120 +43,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchUsers } from "@shared/api/admin";
+import { deleteUser, fetchUsers } from "@shared/api/admin";
 import { User } from "@shared/types/admin.types";
+import { useEffect } from "react";
 import NewUserForm from "./components/NewUserForm";
 
 const PAGE_SIZE = 50;
-
-const columns: ColumnDef<User>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Zazmacz wszytkie"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Zaznacz wiersz"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Imię",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "surname",
-    header: "Nazwisko",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("surname")}</div>,
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "type",
-    header: "Typ",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("type")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return (
-        <Dialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Otwórz menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Akcje</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
-                Kopiuj maila
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-
-              <DialogTrigger>
-                <DropdownMenuItem>Usuń użytkownika</DropdownMenuItem>
-              </DialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Czy jesteś pewny?</DialogTitle>
-              <DialogDescription>Ta akcja usunie użytkownika {user.email}.</DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Anuluj</Button>
-              </DialogClose>
-              <Button variant="destructive" onClick={() => handleDeleteUser(user)}>
-                Usuń
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      );
-    },
-  },
-];
-
-function handleDeleteUser(user: User) {
-  console.log(user);
-
-  // deleteUser({ id: user.id, token: localStorage.getItem("authToken") || "" }).then(() => {
-  //   window.location.reload();
-  // });
-}
 
 export function Users() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -166,23 +58,128 @@ export function Users() {
   const [users, setUsers] = React.useState<User[]>([]);
   const [pageNumber, setPageNumber] = React.useState(1);
 
-  React.useEffect(() => {
-    fetchUsers({ limit: PAGE_SIZE, page: 1, token: localStorage.getItem("authToken") || "" }).then(
-      (users) => {
-        console.log(users);
-        setUsers(users);
-      }
-    );
-  }, []);
+  const columns: ColumnDef<User>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Zazmacz wszytkie"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Zaznacz wiersz"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "Imię",
+      cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "surname",
+      header: "Nazwisko",
+      cell: ({ row }) => <div className="capitalize">{row.getValue("surname")}</div>,
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "type",
+      header: "Typ",
+      cell: ({ row }) => <div className="capitalize">{row.getValue("type")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const user = row.original;
 
-  React.useEffect(() => {
-    fetchUsers({
+        return (
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Otwórz menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Akcje</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
+                  Kopiuj maila
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+
+                <DialogTrigger>
+                  <DropdownMenuItem>Usuń użytkownika</DropdownMenuItem>
+                </DialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Czy jesteś pewny?</DialogTitle>
+                <DialogDescription>Ta akcja usunie użytkownika {user.email}.</DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Anuluj</Button>
+                </DialogClose>
+                <Button variant="destructive" onClick={() => handleDeleteUser(user)}>
+                  Usuń
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      },
+    },
+  ];
+
+  function handleDeleteUser(user: User) {
+    console.log(user);
+
+    deleteUser({ id: user.id, token: localStorage.getItem("authToken") || "" }).then(() => {
+      setUsers((prev) => prev.filter((u) => u.id !== user.id));
+      fetchData();
+    });
+  }
+
+  const fetchData = async () => {
+    const users = await fetchUsers({
       limit: PAGE_SIZE,
       page: pageNumber,
       token: localStorage.getItem("authToken") || "",
-    }).then((users) => {
-      setUsers(users);
     });
+    setUsers(users);
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [pageNumber]);
 
   const table = useReactTable<User>({
@@ -210,7 +207,7 @@ export function Users() {
       <div className="flex flex-row justify-between">
         <h1 className="text-2xl font-bold mb-4">Użytkownicy</h1>
         <Dialog>
-          <NewUserForm />
+          <NewUserForm fetchData={fetchData} />
         </Dialog>
       </div>
 

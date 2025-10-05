@@ -38,7 +38,7 @@ adminRouter.post("/users", async (req, res) => {
   const result = NewUserSchema.safeParse(req.body);
 
   if (!result.success) {
-    return res.status(400).json({ message: "Invalid request data", errors: result.error.message });
+    return res.status(400).json({ message: "Invalid request data: " + result.error.message });
   }
 
   const newUserData = result.data;
@@ -48,6 +48,8 @@ adminRouter.post("/users", async (req, res) => {
       ...newUserData,
       confirmPassword: newUserData.password,
     });
+
+    return res.status(201).json({ message: "User created successfully" });
   } catch (e: any) {
     return res.status(500).json({ message: e.message });
   }
