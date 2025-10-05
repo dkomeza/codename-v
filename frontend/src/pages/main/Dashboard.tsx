@@ -56,7 +56,7 @@ const events: Event[] = [
 ];
 
 function Dashboard() {
-  const categories = useMemo(() => Array.from(new Set(events.map((e) => e.category))), [events]);
+  const categories = useMemo(() => Array.from(new Set(events.map((e) => e.category))), []);
 
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>(events);
   const toggleFavorite = (id: number) => {
@@ -88,7 +88,7 @@ function Dashboard() {
     updateVisibleCards();
     window.addEventListener("resize", updateVisibleCards);
     return () => window.removeEventListener("resize", updateVisibleCards);
-  }, []);
+  }, [categories]);
 
   const handlePrev = (category: string) => {
     setScrollIndices((prev) => ({ ...prev, [category]: Math.max(prev[category] - 1, 0) }));

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router";
 import NotificationMenu from "@/components/notifications/notificationMenu";
 import { Button } from "@/components/ui/button";
-import { Clock, MapPin, Heart } from "lucide-react";
+import { Clock, Heart, MapPin } from "lucide-react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
 type Event = {
   id: number;
@@ -16,41 +16,77 @@ type Event = {
 
 // tymczasowe dane do testów
 const events: Event[] = [
-  { id: 1, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favorite: true },
-  { id: 2, title: "Sprzątanie parku", date: "Null", location: "Null", image: "pigeon.png", category: "Ochrona Środowiska", favorite: false },
-  { id: 3, title: "Spotkanie organizacyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favorite: true },
-  { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna", favorite: false },
+  {
+    id: 1,
+    title: "Warsztaty integracyjne",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Polecane",
+    favorite: true,
+  },
+  {
+    id: 2,
+    title: "Sprzątanie parku",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Ochrona Środowiska",
+    favorite: false,
+  },
+  {
+    id: 3,
+    title: "Spotkanie organizacyjne",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Polecane",
+    favorite: true,
+  },
+  {
+    id: 4,
+    title: "Turniej piłki nożnej",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Pomoc społeczna i humanitarna",
+    favorite: false,
+  },
 ];
 
 function CategoryPage() {
   const { categoryName } = useParams<{ categoryName: string }>();
   const navigate = useNavigate();
 
+  const [favoriteEvents, setFavoriteEvents] = useState<Event[]>(events);
+
   if (!categoryName) return null;
 
-  const [favoriteEvents, setFavoriteEvents] = useState<Event[]>(events);
   const toggleFavorite = (id: number) => {
-    setFavoriteEvents(prev =>
-      prev.map(ev =>
-        ev.id === id ? { ...ev, favorite: !ev.favorite } : ev
-      )
+    setFavoriteEvents((prev) =>
+      prev.map((ev) => (ev.id === id ? { ...ev, favorite: !ev.favorite } : ev))
     );
   };
 
-  const filteredEvents = favoriteEvents.filter(e => e.category === categoryName);
+  const filteredEvents = favoriteEvents.filter((e) => e.category === categoryName);
 
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <Button variant="outline" onClick={() => navigate("/")}>Powrót</Button>
+        <Button variant="outline" onClick={() => navigate("/")}>
+          Powrót
+        </Button>
         <NotificationMenu />
       </div>
 
       <h2 className="text-xl font-semibold">{categoryName}</h2>
 
       <div className="flex flex-col gap-4 justify-start">
-        {filteredEvents.map(event => (
-          <div key={event.id} className="relative w-64 h-64 rounded-lg overflow-hidden shadow-lg select-none">
+        {filteredEvents.map((event) => (
+          <div
+            key={event.id}
+            className="relative w-64 h-64 rounded-lg overflow-hidden shadow-lg select-none"
+          >
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -59,8 +95,9 @@ function CategoryPage() {
               className="absolute top-2 right-2 p-1 rounded-full bg-white/70 hover:bg-black/10 transition-colors"
             >
               <Heart
-                className={`w-6 h-6 ${event.favorite ? "fill-red-500 text-red-500" : "text-red-500"
-                  }`}
+                className={`w-6 h-6 ${
+                  event.favorite ? "fill-red-500 text-red-500" : "text-red-500"
+                }`}
               />
             </button>
             <img src={event.image} alt={event.title} className="w-full h-full object-cover" />

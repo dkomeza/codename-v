@@ -4,7 +4,7 @@ import { Navigate } from "react-router";
 export default function AuthLayout() {
   const { user } = useAuth();
 
-  if (!user || user.role !== "ADMIN") {
+  if (!user || user.type !== "ADMIN") {
     return <Navigate to="/" replace />;
   }
 

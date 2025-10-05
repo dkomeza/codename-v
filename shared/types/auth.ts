@@ -6,10 +6,8 @@ export type User = {
   name: string;
   surname: string;
   email: string;
-  role: Role;
+  type: "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 };
-
-export type Role = "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 
 export type AuthToken = {
   token: string;

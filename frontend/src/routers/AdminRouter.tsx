@@ -11,7 +11,7 @@ export default function AdminRouter() {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.role !== "ADMIN") {
+  if (user.type !== "ADMIN") {
     console.log(user);
     return <Navigate to="/" replace />;
   }
