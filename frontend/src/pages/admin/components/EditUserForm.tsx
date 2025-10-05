@@ -146,7 +146,6 @@ function EditUserForm(props: EditUserFormProps) {
               control={form.control}
               name="birthDate"
               render={({ field }) => {
-                console.log("Field value:", field.value);
                 return (
                   <FormItem>
                     <FormLabel>Data urodzenia</FormLabel>
