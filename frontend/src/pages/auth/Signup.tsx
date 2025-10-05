@@ -18,15 +18,15 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import { SignUpSchema } from "@shared/schemas/auth.schema";
+import { SignUpSchema as RawSignUpSchema } from "@shared/schemas/auth.schema";
+
+// Ensure birthDate is coerced to Date
+const SignUpSchema = RawSignUpSchema.extend({
+  birthDate: z.coerce.date(),
+});
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-// // Ensure birthDate is coerced to Date
-// const SignUpSchema = RawSignUpSchema.safeExtend({
-//   birthDate: z.coerce.date(),
-// });
 
 type TabProps = {
   form: ReturnType<typeof useForm<z.infer<typeof SignUpSchema>>>;
@@ -240,11 +240,7 @@ const tabs = ["info", "password", "personal"] as const;
 export function Signup() {
   const [tab, setTab] = useState<(typeof tabs)[number]>(tabs[0]);
   const form = useForm<z.infer<typeof SignUpSchema>>({
-    resolver: zodResolver(
-      SignUpSchema.safeExtend({
-        birthDate: z.date(),
-      })
-    ),
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
       name: "Dawid",
       surname: "Komęza",

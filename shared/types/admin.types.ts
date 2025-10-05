@@ -6,7 +6,6 @@ export type User = {
   name: string;
   surname: string;
   email: string;
-  birthDate: Date;
   type: "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 };
 
