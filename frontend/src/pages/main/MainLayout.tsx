@@ -26,9 +26,11 @@ function MainLayout() {
     { name: "Menu", href: "/menu", icon: MenuRounded },
   ];
   return (
-    <div>
-      <Outlet />
-      <nav className="user-nav flex fixed bottom-0 left-0 right-0 h-18 bg-white border-t border-gray-200 justify-around items-center">
+    <div className="flex flex-col h-screen">
+      <main className="flex-1 overflow-auto p-4 bg-gray-50">
+        <Outlet />
+      </main>
+      <nav className="flex justify-around bg-white border-t border-gray-200 p-2">
         {pages.map((page) => (
           <Link
             key={page.name}
