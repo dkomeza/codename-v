@@ -15,7 +15,16 @@ import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -98,27 +107,55 @@ const columns: ColumnDef<User>[] = [
       const user = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Otwórz menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Akcje</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
-              Kopiuj maila
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Otwórz menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Akcje</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
+                Kopiuj maila
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View customer</DropdownMenuItem>
+
+              <DialogTrigger>
+                <DropdownMenuItem>Usuń użytkownika</DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Czy jesteś pewny?</DialogTitle>
+              <DialogDescription>Ta akcja usunie użytkownika {user.email}.</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Anuluj</Button>
+              </DialogClose>
+              <Button variant="destructive" onClick={() => handleDeleteUser(user)}>
+                Usuń
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       );
     },
   },
 ];
+
+function handleDeleteUser(user: User) {
+  console.log(user);
+
+  // deleteUser({ id: user.id, token: localStorage.getItem("authToken") || "" }).then(() => {
+  //   window.location.reload();
+  // });
+}
 
 export function Users() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
