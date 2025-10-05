@@ -53,16 +53,3 @@ export async function signUp(data: SignUpData): Promise<Token> {
     throw error;
   }
 }
-
-export async function signOut(): Promise<void> {
-  const response = await fetch(`${url}/auth/signout`, {
-    method: "POST",
-    credentials: "include",
-  });
-
-  try {
-    await validateResponse<void>(response);
-  } catch (error) {
-    throw error;
-  }
-}

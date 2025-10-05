@@ -20,6 +20,6 @@
       "@shared/*": ["../shared/*"]
     }
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "tests"],
   "references": [{ "path": "../shared" }]
 }
