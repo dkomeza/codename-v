@@ -56,6 +56,7 @@ authRouter.post("/signup", checkDuplicateEmail, async (req, res) => {
 
     return res.status(201).json(data);
   } catch (e: any) {
+    console.log(e);
     return res.status(500).json({ message: e.message });
   }
 });
