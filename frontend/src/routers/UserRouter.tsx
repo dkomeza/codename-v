@@ -5,14 +5,15 @@ import MainLayout from "@/pages/main/MainLayout";
 import CategoryPage from "@/pages/main/CategoryPage";
 import FavoritesPage from "@/pages/favorites/FavoritesPage";
 import MenuPage from "@/pages/menu/MenuPage";
+import EventPage from "@/pages/event/EventPage"
 import { Navigate, Route, Routes } from "react-router";
 
 export default function UserRouter() {
   const { user } = useAuth();
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!user) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return (
     <Routes>
@@ -23,6 +24,7 @@ export default function UserRouter() {
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/menu" element={<MenuPage />} />
       </Route>
+      <Route path="/event/:id" element={<EventPage />} />
     </Routes>
   );
 }
