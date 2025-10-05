@@ -28,6 +28,7 @@ model User {
 
   Application Application[]
   Message Message[]
+  Opinion Opinion[]
 
   @@map("users")
 }
@@ -55,6 +56,7 @@ model Event {
   organizationId String
 
   Application Application[]
+  Opinion Opinion[]
   @@map("events")
 }
 
@@ -107,6 +109,16 @@ model Message {
   messageTime DateTime
 
   @@map("messages")
+}
+
+model Opinion {
+  id String @id @default(cuid())
+  rating Float
+  comment String
+  authorIdRel User @relation(fields: [authorId], references: [id])
+  authorId String
+  eventIdRel Event @relation(fields: [eventId], references: [id])
+  eventId String
 }
 
   model School {
