@@ -6,7 +6,8 @@ import CategoryPage from "@/pages/main/CategoryPage";
 import Dashboard from "@/pages/main/Dashboard";
 import MainLayout from "@/pages/main/MainLayout";
 import MenuPage from "@/pages/menu/MenuPage";
-import { Navigate, Route, Routes } from "react-router";
+import HistoryPage from "@/pages/history/HistoryPage";
+import { Route, Routes } from "react-router";
 
 export default function UserRouter() {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ export default function UserRouter() {
         <Route path="/:categoryName" element={<CategoryPage />} />
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/history" element={<HistoryPage />} />
       </Route>
       <Route path="/event/:id" element={<EventPage />} />
     </Routes>
