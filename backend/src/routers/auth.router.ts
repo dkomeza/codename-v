@@ -1,6 +1,5 @@
 import { login, register } from "@/controllers/auth.controller";
 import { authenticate } from "@/middleware/auth.middleware";
-import { checkDuplicateEmail } from "@/services/auth.service";
 import type { AuthToken, User } from "@shared/types/auth";
 import express from "express";
 
@@ -43,7 +42,7 @@ authRouter.post("/signin", async (req, res) => {
   }
 });
 
-authRouter.post("/signup", checkDuplicateEmail, async (req, res) => {
+authRouter.post("/signup", async (req, res) => {
   const result = SignUpSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -56,7 +55,6 @@ authRouter.post("/signup", checkDuplicateEmail, async (req, res) => {
 
     return res.status(201).json(data);
   } catch (e: any) {
-    console.log(e);
     return res.status(500).json({ message: e.message });
   }
 });

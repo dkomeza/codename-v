@@ -1,30 +1,20 @@
 import { signJWT } from "@/services/auth.service";
 import { PrismaClient } from "@prisma/client";
-import type { SignUpData } from "@shared/types/auth";
+import type { Role, SignUpData } from "@shared/types/auth";
 
 const prisma = new PrismaClient();
 
-export const getUserByToken = async (req: any, res: any) => {
-  try {
-    const user = prisma.user.findFirst({
-      select: {
-        id: true,
-        name: true,
-        surname: true,
-        email: true,
-      },
-      where: {
-        id: res.locals.userId,
-      },
-    });
+export const register = async (data: SignUpData & { type: Role }) => {
+  const userExists = await prisma.user.findFirst({
+    where: {
+      email: data.email,
+    },
+  });
 
-    res.status(200).json(user);
-  } catch (e: any) {
-    res.status(500).json({ message: e.message });
+  if (userExists) {
+    throw new Error("User with this email already exists!");
   }
-};
 
-export const register = async (data: SignUpData) => {
   const hashedPassword = await Bun.password.hash(data.password);
 
   const newUser = await prisma.user.create({

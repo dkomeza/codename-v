@@ -16,4 +16,4 @@ export type AuthToken = {
 };
 
 export type LoginData = z.infer<typeof LoginSchema>;
-export type SignUpData = z.infer<typeof SignUpSchema> & { type: Role };
+export type SignUpData = z.infer<typeof SignUpSchema>;
