@@ -23,7 +23,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -31,7 +30,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -48,6 +46,8 @@ import { User } from "@shared/types/admin.types";
 import { useEffect } from "react";
 import NewUserForm from "./components/NewUserForm";
 
+import EditUserForm from "./components/EditUserForm";
+
 const PAGE_SIZE = 50;
 
 export function Users() {
@@ -57,8 +57,10 @@ export function Users() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [users, setUsers] = React.useState<User[]>([]);
   const [pageNumber, setPageNumber] = React.useState(1);
+  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState<boolean>(false);
 
-  const columns: ColumnDef<User>[] = [
+  const columns: ColumnDef<User & { birthDate: Date }>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -118,7 +120,7 @@ export function Users() {
         const user = row.original;
 
         return (
-          <Dialog>
+          <>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -131,30 +133,57 @@ export function Users() {
                 <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
                   Kopiuj maila
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View customer</DropdownMenuItem>
 
-                <DialogTrigger>
-                  <DropdownMenuItem>Usuń użytkownika</DropdownMenuItem>
-                </DialogTrigger>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setIsEditDialogOpen(true);
+                    setIsDeleteDialogOpen(false);
+                  }}
+                >
+                  Edytuj użytkownika
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  onClick={() => {
+                    setIsDeleteDialogOpen(true);
+                    setIsEditDialogOpen(false);
+                  }}
+                >
+                  Usuń użytkownika
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Czy jesteś pewny?</DialogTitle>
-                <DialogDescription>Ta akcja usunie użytkownika {user.email}.</DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Anuluj</Button>
-                </DialogClose>
-                <Button variant="destructive" onClick={() => handleDeleteUser(user)}>
-                  Usuń
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+            <Dialog
+              open={isEditDialogOpen || isDeleteDialogOpen}
+              onOpenChange={() => {
+                setIsEditDialogOpen(false);
+                setIsDeleteDialogOpen(false);
+              }}
+            >
+              {isEditDialogOpen ? <EditUserForm fetchData={fetchData} oldValues={user} /> : null}
+              {isDeleteDialogOpen ? (
+                <>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Czy jesteś pewny?</DialogTitle>
+                      <DialogDescription>
+                        Ta akcja usunie użytkownika {user.email}.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">Anuluj</Button>
+                      </DialogClose>
+                      <Button variant="destructive" onClick={() => handleDeleteUser(user as User)}>
+                        Usuń
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </>
+              ) : null}
+            </Dialog>
+          </>
         );
       },
     },
@@ -184,7 +213,7 @@ export function Users() {
 
   const table = useReactTable<User>({
     data: users,
-    columns,
+    columns: columns as ColumnDef<User>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

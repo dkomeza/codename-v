@@ -6,7 +6,7 @@ import {
 } from "@/controllers/admin.controller";
 import { register } from "@/controllers/auth.controller";
 import { authenticate, authenticateAdmin } from "@/middleware/auth.middleware";
-import { NewUserSchema } from "@shared/schemas/admin.schema";
+import { ModifyUserSchema, NewUserSchema } from "@shared/schemas/admin.schema";
 import { Router } from "express";
 
 const adminRouter = Router();
@@ -57,7 +57,7 @@ adminRouter.post("/users", async (req, res) => {
 
 adminRouter.put("/users/:id", async (req, res) => {
   const userId = req.params.id;
-  const result = NewUserSchema.partial().safeParse(req.body);
+  const result = ModifyUserSchema.partial().safeParse(req.body);
 
   if (!result.success) {
     return res.status(400).json({ message: "Invalid request data", errors: result.error.message });
