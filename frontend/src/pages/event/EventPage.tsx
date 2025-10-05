@@ -111,13 +111,13 @@ function EventPage() {
         <img src={event.image} alt={event.title} className="w-full h-64 object-cover" />
         <Button
           onClick={() => navigate(-1)}
-          className="absolute top-2 left-2 p-2 rounded-full bg-white/70 hover:bg-white/50 transition-colors"
+          className="absolute top-2 left-2 p-2 rounded-full bg-red-600/80 hover:bg-red-600/60 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
         <Button
           onClick={() => alert("Czy chcesz rozpocząć konwersację z organizatorem wydarzenia?")}
-          className="absolute top-2 right-2 p-2 rounded-full bg-white/70 hover:bg-white/50 transition-colors"
+          className="absolute top-2 right-2 p-2 rounded-full bg-red-600/80 hover:bg-red-600/60 transition-colors"
         >
           <Mail className="w-5 h-5" />
         </Button>
@@ -149,7 +149,7 @@ function EventPage() {
           </div>
         )}
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center p-6 gap-4">
         <Button
           onClick={() => setEventFavourite((prev) => !prev)}
           aria-label="Ulubione"
