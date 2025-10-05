@@ -7,7 +7,7 @@ import Dashboard from "@/pages/main/Dashboard";
 import MainLayout from "@/pages/main/MainLayout";
 import MenuPage from "@/pages/menu/MenuPage";
 import HistoryPage from "@/pages/history/HistoryPage";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 
 export default function UserRouter() {
   const { user } = useAuth();
