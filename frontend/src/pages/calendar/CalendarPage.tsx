@@ -13,19 +13,29 @@ export default function CalendarPage() {
 
   const events: CalendarEvent[] = [
     {
-      date: new Date(2025, 9, 10),
-      title: "Spotkanie zespołu",
-      description: "Cotygodniowe spotkanie projektowe",
+      date: new Date(2025, 9, 12),
+      title: "nie Urodziny starego",
+      description: "nie PIWO",
     },
     {
       date: new Date(2025, 9, 15),
-      title: "Deadline projektu",
-      description: "Ostateczny termin oddania projektu",
+      title: "Urodziny starego",
+      description: "PIWO",
     },
     {
       date: new Date(2025, 9, 15),
-      title: "Urodziny szefa",
-      description: "Przygotować prezent i życzenia",
+      title: "Urodziny starego",
+      description: "PIWO",
+    },
+    {
+      date: new Date(2025, 9, 15),
+      title: "Urodziny starego",
+      description: "PIWO",
+    },
+    {
+      date: new Date(2025, 9, 15),
+      title: "Urodziny starego",
+      description: "PIWO",
     },
     {
       date: new Date(2025, 9, 15),
