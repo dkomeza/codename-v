@@ -1,9 +1,9 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from "react-router";
-import NotificationMenu from '@/components/notifications/notificationMenu';
-import { Input } from "@/components/ui/input";
+import NotificationMenu from "@/components/notifications/notificationMenu";
 import { Button } from "@/components/ui/button";
-import { Heart, Clock, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ChevronLeft, ChevronRight, Clock, Heart, MapPin } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 type Event = {
   id: number;
@@ -12,35 +12,64 @@ type Event = {
   location: string;
   image: string;
   category: string;
-  favorite: boolean
+  favorite: boolean;
 };
 
 // konieczna zamiana statycznych danych na pobierane
 const events: Event[] = [
-  { id: 1, title: "Warsztaty integracyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favorite: true },
-  { id: 2, title: "Sprzątanie parku", date: "Null", location: "Null", image: "pigeon.png", category: "Ochrona Środowiska", favorite: false },
-  { id: 3, title: "Spotkanie organizacyjne", date: "Null", location: "Null", image: "pigeon.png", category: "Polecane", favorite: true },
-  { id: 4, title: "Turniej piłki nożnej", date: "Null", location: "Null", image: "pigeon.png", category: "Pomoc społeczna i humanitarna", favorite: false },
+  {
+    id: 1,
+    title: "Warsztaty integracyjne",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Polecane",
+    favorite: true,
+  },
+  {
+    id: 2,
+    title: "Sprzątanie parku",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Ochrona Środowiska",
+    favorite: false,
+  },
+  {
+    id: 3,
+    title: "Spotkanie organizacyjne",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Polecane",
+    favorite: true,
+  },
+  {
+    id: 4,
+    title: "Turniej piłki nożnej",
+    date: "Null",
+    location: "Null",
+    image: "pigeon.png",
+    category: "Pomoc społeczna i humanitarna",
+    favorite: false,
+  },
 ];
 
 function Dashboard() {
-  const categories = useMemo(
-    () => Array.from(new Set(events.map(e => e.category))),
-    [events]
-  );
+  const categories = useMemo(() => Array.from(new Set(events.map((e) => e.category))), [events]);
 
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>(events);
   const toggleFavorite = (id: number) => {
-    setFavoriteEvents(prev =>
-      prev.map(ev =>
-        ev.id === id ? { ...ev, favorite: !ev.favorite } : ev
-      )
+    setFavoriteEvents((prev) =>
+      prev.map((ev) => (ev.id === id ? { ...ev, favorite: !ev.favorite } : ev))
     );
   };
 
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const filteredEvents = favoriteEvents.filter(e => e.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredEvents = favoriteEvents.filter((e) =>
+    e.title.toLowerCase().includes(query.toLowerCase())
+  );
 
   const [scrollIndices, setScrollIndices] = useState<{ [key: string]: number }>(
     categories.reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {})
@@ -62,17 +91,17 @@ function Dashboard() {
   }, []);
 
   const handlePrev = (category: string) => {
-    setScrollIndices(prev => ({ ...prev, [category]: Math.max(prev[category] - 1, 0) }));
+    setScrollIndices((prev) => ({ ...prev, [category]: Math.max(prev[category] - 1, 0) }));
   };
 
   const handleNext = (category: string, eventsLength: number) => {
     const maxIndex = Math.max(eventsLength - visibleCards, 0);
-    setScrollIndices(prev => ({ ...prev, [category]: Math.min(prev[category] + 1, maxIndex) }));
+    setScrollIndices((prev) => ({ ...prev, [category]: Math.min(prev[category] + 1, maxIndex) }));
   };
 
-  const eventsByCategory = categories.map(cat => ({
+  const eventsByCategory = categories.map((cat) => ({
     category: cat,
-    events: filteredEvents.filter(e => e.category === cat),
+    events: filteredEvents.filter((e) => e.category === cat),
   }));
 
   return (
@@ -95,7 +124,8 @@ function Dashboard() {
       {/* Eventy według kategorii */}
       {eventsByCategory.map(({ category, events }) => (
         <div key={category} className="space-y-2">
-          <div className="flex items-center cursor-pointer hover:text-red-500"
+          <div
+            className="flex items-center cursor-pointer hover:text-red-500"
             onClick={() => navigate(`/${encodeURIComponent(category)}`)}
           >
             <h2 className="text-lg font-semibold">{category}</h2>
@@ -115,13 +145,20 @@ function Dashboard() {
                 <ChevronLeft />
               </Button>
 
-              <div ref={el => containerRefs.current[category] = el} className="flex overflow-hidden w-full">
+              <div
+                ref={(el) => {
+                  containerRefs.current[category] = el;
+                }}
+                className="flex overflow-hidden w-full"
+              >
                 <div
                   className="flex transition-transform duration-300"
                   style={{ transform: `translateX(-${scrollIndices[category] * 16}rem)` }}
                 >
-                  {events.map(event => (
-                    <div key={event.id} className="relative w-64 h-64 flex-shrink-0 mr-4 rounded-lg overflow-hidden cursor-pointer shadow-lg select-none"
+                  {events.map((event) => (
+                    <div
+                      key={event.id}
+                      className="relative w-64 h-64 flex-shrink-0 mr-4 rounded-lg overflow-hidden cursor-pointer shadow-lg select-none"
                       onClick={() => navigate(`/event/${encodeURIComponent(event.id)}`)}
                     >
                       <button
@@ -132,11 +169,16 @@ function Dashboard() {
                         className="absolute top-2 right-2 p-1 rounded-full bg-white/70 hover:bg-black/10 transition-colors"
                       >
                         <Heart
-                          className={`w-6 h-6 ${event.favorite ? "fill-red-500 text-red-500" : "text-red-500"
-                            }`}
+                          className={`w-6 h-6 ${
+                            event.favorite ? "fill-red-500 text-red-500" : "text-red-500"
+                          }`}
                         />
                       </button>
-                      <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
                       <div className="absolute bottom-0 w-full bg-black bg-opacity-80 backdrop-blur-sm p-2 text-white flex flex-col">
                         <p className="font-semibold truncate select-text">{event.title}</p>
                         <div className="flex justify-between items-center text-xs mt-1">
@@ -146,7 +188,7 @@ function Dashboard() {
                           </div>
                           <div className="flex items-center space-x-1">
                             <MapPin className="w-3 h-3" />
-                            <span className='select-text'>{event.location}</span>
+                            <span className="select-text">{event.location}</span>
                           </div>
                         </div>
                       </div>
@@ -172,4 +214,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-;
