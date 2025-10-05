@@ -15,7 +15,7 @@ export async function fetchUsers(data: AdminUsersRequest): Promise<User[]> {
 
   const b = a.map((user) => ({
     ...user,
-    birthDate: user.birthDate ? new Date(user.birthDate) : null,
+    birthDate: new Date(user.birthDate),
   }));
 
   return b;
