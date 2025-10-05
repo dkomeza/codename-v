@@ -1,7 +1,9 @@
 import prisma from "@/config/postgres.config";
+import { authenticate } from "@/middleware/auth.middleware";
 import { Router } from "express";
 
 export const schoolRouter = Router();
+schoolRouter.use(authenticate);
 
 // GET /schools
 schoolRouter.get("/", async (req, res) => {

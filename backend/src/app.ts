@@ -2,8 +2,7 @@ import { getPackageVersion } from "@/config/server.config";
 import type { HealthCheckResponse } from "@shared/types";
 import express from "express";
 import cron from "node-cron";
-import authRouter from "./routers/auth.router";
-import { schoolRouter } from "./routers/school.router";
+import { adminRouter, authRouter, eventRouter, schoolRouter } from "./routers";
 import { checkSchools, syncSchools } from "./services/msip.service";
 
 const app = express();
@@ -11,8 +10,10 @@ const PORT = Bun.env.PORT || 5000;
 const VERSION = getPackageVersion();
 
 app.use(express.json());
-app.use("/auth/", authRouter);
-app.use("/schools/", schoolRouter);
+app.use("/auth", authRouter);
+app.use("/schools", schoolRouter);
+app.use("/events", eventRouter);
+app.use("/admin", adminRouter);
 
 // Required to make sure that the container is healthy
 app.get("/health", (_req, res) => {
