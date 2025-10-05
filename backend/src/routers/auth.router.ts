@@ -27,7 +27,9 @@ authRouter.post("/signin", async (req, res) => {
   const result = LoginSchema.safeParse(req.body);
 
   if (!result.success) {
-    return res.status(400).json({ message: "Invalid request data", errors: result.error.message });
+    return res
+      .status(400)
+      .json({ message: "Invalid request data: " + result.error.issues[0].message });
   }
 
   const { email, password } = result.data;

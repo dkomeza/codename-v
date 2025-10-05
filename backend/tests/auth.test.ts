@@ -95,6 +95,17 @@ describe("Sign In", async () => {
       expect(error.message).toBe("Invalid password or email!");
     }
   });
+
+  test("should not sign in with wrong data", async () => {
+    try {
+      await auth.signIn({
+        email: "notanemail",
+        password: "short",
+      });
+    } catch (error: any) {
+      expect(error.message).toBe("Invalid request data: Invalid email address");
+    }
+  });
 });
 
 describe("Authentication", async () => {
