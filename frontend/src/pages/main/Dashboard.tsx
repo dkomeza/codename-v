@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import NotificationMenu from '@/components/notifications/notificationMenu';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -121,7 +121,9 @@ function Dashboard() {
                   style={{ transform: `translateX(-${scrollIndices[category] * 16}rem)` }}
                 >
                   {events.map(event => (
-                    <div key={event.id} className="relative w-64 h-64 flex-shrink-0 mr-4 rounded-lg overflow-hidden cursor-pointer shadow-lg select-none">
+                    <div key={event.id} className="relative w-64 h-64 flex-shrink-0 mr-4 rounded-lg overflow-hidden cursor-pointer shadow-lg select-none"
+                    onClick={() => navigate(`/event/${encodeURIComponent(event.id)}`)} 
+                    >
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
