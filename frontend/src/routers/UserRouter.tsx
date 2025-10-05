@@ -12,9 +12,9 @@ import { Route, Routes } from "react-router";
 export default function UserRouter() {
   const { user } = useAuth();
 
-  // if (!user) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <Routes>

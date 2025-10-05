@@ -18,7 +18,12 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import { SignUpSchema } from "@shared/schemas/auth.schema";
+import { SignUpSchema as RawSignUpSchema } from "@shared/schemas/auth.schema";
+
+// Ensure birthDate is coerced to Date
+const SignUpSchema = RawSignUpSchema.extend({
+  birthDate: z.coerce.date(),
+});
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -242,7 +247,7 @@ export function Signup() {
       email: "dawid.komeza@gmail.com",
       password: "ZAQ!2wsx",
       confirmPassword: "ZAQ!2wsx",
-      birthDate: "2003-04-25",
+      birthDate: new Date("2003-04-25"),
     },
   });
 

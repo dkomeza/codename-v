@@ -18,14 +18,17 @@ type JWTPayload = {
 };
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers["x-access-token"] || req.headers["authorization"];
+  const token = (req.headers["x-access-token"] || req.headers["authorization"])
+    ?.toString()
+    .replace("Bearer", "")
+    .trim();
 
   if (!token) {
-    res.status(403).json({ message: "Token not provided!" });
+    return res.status(403).json({ message: "Token not provided!" });
   }
 
   try {
-    const data = jwt.verify((token as string).replace("Bearer ", ""), JWT_SECRET) as JWTPayload;
+    const data = jwt.verify(token as string, JWT_SECRET) as JWTPayload;
 
     const userFound = await prisma.user.findFirst({
       where: {
@@ -39,19 +42,17 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     req.user = userFound;
 
-    if (!userFound) {
-      res.status(401).json({ message: "User not present in database!" });
-    }
-
     next();
   } catch (e: any) {
-    res.status(500).json({ message: e.message });
+    res.status(500).json({ message: "Invalid token!" });
   }
 };
 
 export const authenticateAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (req.user?.type !== "ADMIN") {
-    return res.status(403).json({ message: "Require Admin Role!" });
+    return res
+      .status(403)
+      .json({ message: "User does not have permission to access this resource!" });
   }
 
   next();

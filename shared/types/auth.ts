@@ -6,14 +6,12 @@ export type User = {
   name: string;
   surname: string;
   email: string;
-  role: Role;
+  type: "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 };
-
-export type Role = "ADMIN" | "ORG" | "COORDINATOR" | "VOLUNTEER";
 
 export type AuthToken = {
   token: string;
 };
 
 export type LoginData = z.infer<typeof LoginSchema>;
-export type SignUpData = z.infer<typeof SignUpSchema> & { type: Role };
+export type SignUpData = z.infer<typeof SignUpSchema>;

@@ -11,7 +11,14 @@ export async function fetchUsers(data: AdminUsersRequest): Promise<User[]> {
     },
   });
 
-  return await validateResponse<User[]>(response);
+  const a = await validateResponse<User[]>(response);
+
+  const b = a.map((user) => ({
+    ...user,
+    birthDate: user.birthDate ? new Date(user.birthDate) : null,
+  }));
+
+  return b;
 }
 
 export async function createUser(data: AdminNewUser & { token: string }): Promise<void> {
