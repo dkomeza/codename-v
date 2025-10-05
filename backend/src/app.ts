@@ -2,7 +2,7 @@ import { getPackageVersion } from "@/config/server.config";
 import type { HealthCheckResponse } from "@shared/types";
 import express from "express";
 import cron from "node-cron";
-import { adminRouter, authRouter, eventRouter, schoolRouter } from "./routers";
+import { adminRouter, authRouter, eventRouter, orgRouter, schoolRouter } from "./routers";
 import { checkSchools, syncSchools } from "./services/msip.service";
 
 const app = express();
@@ -14,6 +14,7 @@ app.use("/auth", authRouter);
 app.use("/schools", schoolRouter);
 app.use("/events", eventRouter);
 app.use("/admin", adminRouter);
+app.use("/orgs", orgRouter);
 
 // Required to make sure that the container is healthy
 app.get("/health", (_req, res) => {

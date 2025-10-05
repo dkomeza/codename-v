@@ -17,7 +17,7 @@ authRouter.get("/", authenticate, (req, res) => {
     email: req.user.email,
     name: req.user.name,
     surname: req.user.surname,
-    role: req.user.type as User["role"],
+    type: req.user.type as User["type"],
   };
 
   res.status(200).json(user);

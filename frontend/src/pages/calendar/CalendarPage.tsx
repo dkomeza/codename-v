@@ -14,33 +14,20 @@ export default function CalendarPage() {
   const events: CalendarEvent[] = [
     {
       date: new Date(2025, 9, 12),
-      title: "nie Urodziny starego",
-      description: "nie PIWO",
+      title: "Zbiórka na rzecz schroniska",
+      description: "Zbiórka karmy i akcesoriów dla zwierząt w schronisku miejskim.",
     },
     {
       date: new Date(2025, 9, 15),
-      title: "Urodziny starego",
-      description: "PIWO",
+      title: "Sprzątanie krakowa",
+      description:
+        "Zapraszamy serdecznie wszystkich wolontariuszy na akcję sprzątania Błoń! Dołącz do nas, aby wspólnie zadbać o nasze otoczenie i cieszyć się czystą przestrzenią do wypoczynku. Wydarzenie odbędzie się w niedzielę, 16 czerwca, od godziny 8:00 do 14:00. ",
     },
     {
       date: new Date(2025, 9, 15),
-      title: "Urodziny starego",
-      description: "PIWO",
-    },
-    {
-      date: new Date(2025, 9, 15),
-      title: "Urodziny starego",
-      description: "PIWO",
-    },
-    {
-      date: new Date(2025, 9, 15),
-      title: "Urodziny starego",
-      description: "PIWO",
-    },
-    {
-      date: new Date(2025, 9, 15),
-      title: "Urodziny starego",
-      description: "PIWO",
+      title: "Wieczorne Sprzątanie Krakowa",
+      description:
+        "Zapraszamy serdecznie wszystkich wolontariuszy na akcję sprzątania Błoń! Dołącz do nas, aby wspólnie zadbać o nasze otoczenie i cieszyć się czystą przestrzenią do wypoczynku. Wydarzenie odbędzie się w niedzielę, 16 czerwca, od godziny 8:00 do 14:00. ",
     },
   ];
 
@@ -73,7 +60,7 @@ export default function CalendarPage() {
         />
       </div>
 
-      <div className="w-9/12 space-y-5">
+      <div className="space-y-5">
         {selectedDateEvents.length > 0 ? (
           selectedDateEvents.map((event, index) => (
             <Card key={index}>
