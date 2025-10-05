@@ -1,15 +1,14 @@
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAllEvents } from "@shared/api/events";
+import { CalendarEvent } from "@shared/types/event.types";
 import { useState } from "react";
-
-interface CalendarEvent {
-  date: Date;
-  title: string;
-  description: string;
-}
 
 export default function CalendarPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const lastWeekEvents = getAllEvents(7);
+  console.log(lastWeekEvents);
 
   const events: CalendarEvent[] = [
     {
@@ -45,7 +44,7 @@ export default function CalendarPage() {
   ];
 
   // Pobiera eventy dla wybranej daty
-  const getEventsForSelectedDate = () => {
+  const getEventsForSelectedDate = (date?: Date) => {
     if (!date) return [];
     return events.filter((event) => event.date.toDateString() === date.toDateString());
   };
@@ -53,7 +52,7 @@ export default function CalendarPage() {
   // Lista dat z eventami (do kropiek)
   const eventDates = events.map((event) => event.date);
 
-  const selectedDateEvents = getEventsForSelectedDate();
+  const selectedDateEvents = getEventsForSelectedDate(date);
 
   return (
     <div className="flex flex-col items-center p-4">
