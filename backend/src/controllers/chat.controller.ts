@@ -58,7 +58,46 @@ export const getChatByUsersId = async (user1Id:string, user2Id:string)=>{
 			]
 		}
 	})
-
+	// const chat = await prisma.chat.findFirst({
+	// 	where: {
+	// 		users: {
+	// 			some: {
+	// 				id: user1Id
+	// 			}
+	// 		}
+	// 	}
+	// });
+	// const chat = await prisma.chat.findFirst({
+	// 	where:{
+	// 		users:{
+	// 			hasEvery: [user1Id, user2Id]
+	// 		}
+	// 	}
+	// })
+	// const chat = await prisma.chat.findFirst({
+	// 	where: {
+	// 		AND: [
+	// 		{
+	// 			users: {
+	// 			some: {
+	// 				id: user1Id
+	// 			}
+	// 			}
+	// 		},
+	// 		{
+	// 			users: {
+	// 			some: {
+	// 				id: user2Id
+	// 			}
+	// 			}
+	// 		}
+	// 		]
+	// 	},
+	// 	include: {
+	// 		users: true,
+	// 		Message: true
+	// 	}
+	// });
 	return chat
 }
 

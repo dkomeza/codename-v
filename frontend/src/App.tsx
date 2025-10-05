@@ -5,10 +5,13 @@ import UserRouter from "@/routers/UserRouter";
 import { Route, Routes } from "react-router";
 import { AuthProvider } from "./context/AuthContext";
 import AuthLayout from "./pages/auth/Layout";
+import Chat from "./components/chat/chat";
 
 function App() {
   return (
     <AuthProvider>
+      <Chat></Chat>
+
       <Routes>
         <Route path="/*" element={<UserRouter />} />
         <Route path="/admin/*" element={<AdminRouter />} />
